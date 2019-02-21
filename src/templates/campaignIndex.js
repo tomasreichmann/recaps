@@ -1,6 +1,7 @@
 import React from "react";
-import { graphql, Link } from "gatsby";
+import { graphql } from "gatsby";
 
+import "./markdown.css";
 import Layout from "../components/Layout";
 import ImageLinkList from "../components/ImageLinkList";
 import ImageLink from "../components/ImageLink";
@@ -14,7 +15,10 @@ export default ({ data, ...otherProps }) => {
     <Layout>
       <div>
         <h1>{post.fields.campaignTitle}</h1>
-        <div dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: post.html }}
+          className="markdown"
+        />
         <div>
           <ImageLinkList>
             {recaps.map(({ node: { fields: recap } }) => (

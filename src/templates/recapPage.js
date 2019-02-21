@@ -1,6 +1,7 @@
 import React from "react";
-import { graphql, Link } from "gatsby";
+import { graphql } from "gatsby";
 
+import "./markdown.css";
 import theme from "../theme";
 import Layout from "../components/Layout";
 import StyledLink from "../components/StyledLink";
@@ -29,7 +30,10 @@ export default ({ data, pageContext, ...otherProps }) => {
           </div>
         )}
         <h1>{post.fields.pageTitle}</h1>
-        <div dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: post.html }}
+          className="markdown"
+        />
         <div
           css={{
             display: "grid",
