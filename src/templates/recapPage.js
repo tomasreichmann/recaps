@@ -76,7 +76,7 @@ export default ({ data, pageContext, ...otherProps }) => {
 };
 
 export const query = graphql`
-  query($slug: String!, $campaignTitle: String!) {
+  query($slug: String!, $campaignTitle: String) {
     markdownRemark(fields: { slug: { eq: $slug } }) {
       html
       fields {

@@ -20,12 +20,12 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     console.log({ slug, isIndex });
     const {
       title: pageTitle,
-      campaign: campaignTitle,
-      imageUri: imageUri
+      campaign: campaignTitle = "",
+      imageUri
     } = node.frontmatter;
     const campaignSlug = campaignTitle
       ? slugify(campaignTitle.toLowerCase())
-      : null;
+      : "";
 
     const pageSlugFragment = [];
     if (campaignSlug) {
@@ -94,32 +94,40 @@ const createRecapPages = (graphql, createPage) => {
       }
     }
   `).then(result => {
+    console.log(
+      "X",
+      result &&
+        result.data &&
+        result.data.allMarkdownRemark &&
+        result.data.allMarkdownRemark.group
+    );
     const groups =
       (result && result.data && result.data.allMarkdownRemark.group) || [];
-    return groups.forEach(group => {
-      group.edges.forEach(({ node }, nodeIndex, nodes) => {
-        const { pagePath, slug } = node.fields;
-        const nextNode = nodes[nodeIndex + 1];
-        const previousNode = nodes[nodeIndex - 1];
+    groups.forEach(group => {
+      group.edges &&
+        group.edges.forEach(({ node }, nodeIndex, nodes) => {
+          const { pagePath, slug } = node.fields;
+          const nextNode = nodes[nodeIndex + 1];
+          const previousNode = nodes[nodeIndex - 1];
 
-        const next = nextNode ? getNodeContext(nextNode.node) : null;
-        const previous = previousNode
-          ? getNodeContext(previousNode.node)
-          : null;
-        const context = getNodeContext(node);
-        console.log({ slug, context, node });
+          const next = nextNode ? getNodeContext(nextNode.node) : null;
+          const previous = previousNode
+            ? getNodeContext(previousNode.node)
+            : null;
+          const context = getNodeContext(node);
+          // console.log({ slug, context, node });
 
-        createPage({
-          path: pagePath,
-          component: path.resolve(`./src/templates/recapPage.js`),
-          context: {
-            ...getNodeContext(node),
-            slug,
-            next,
-            previous
-          }
+          createPage({
+            path: pagePath,
+            component: path.resolve(`./src/templates/recapPage.js`),
+            context: {
+              ...getNodeContext(node),
+              slug,
+              next,
+              previous
+            }
+          });
         });
-      });
     });
   });
 };
@@ -150,7 +158,7 @@ const createCampaignIndexePages = (graphql, createPage) => {
   `).then(result => {
     const groups =
       (result && result.data && result.data.allMarkdownRemark.group) || [];
-    return groups.forEach(group => {
+    groups.forEach(group => {
       group.edges.forEach(({ node }, nodeIndex, nodes) => {
         const { pagePath, slug } = node.fields;
 
@@ -170,12 +178,12 @@ const createCampaignIndexePages = (graphql, createPage) => {
   });
 };
 
-exports.createPages = ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   console.log("createPages");
 
-  return Promise.all(
+  return Promise.all([
     createRecapPages(graphql, createPage),
     createCampaignIndexePages(graphql, createPage)
-  );
+  ]);
 };
