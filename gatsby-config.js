@@ -1,10 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Recaps`,
-    description: `A database of markdown RPG recaps.`,
+    title: `Recapy`,
+    description: `Databáze RPG recapů`,
     author: `tomasreichmann@gmail.com`
   },
   plugins: [
+    `gatsby-plugin-glamor`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,

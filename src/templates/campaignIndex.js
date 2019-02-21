@@ -1,6 +1,9 @@
 import React from "react";
 import { graphql, Link } from "gatsby";
-import Layout from "../components/layout";
+
+import Layout from "../components/Layout";
+import ImageLinkList from "../components/ImageLinkList";
+import ImageLink from "../components/ImageLink";
 
 export default ({ data, ...otherProps }) => {
   console.log({ otherProps });
@@ -13,16 +16,13 @@ export default ({ data, ...otherProps }) => {
         <h1>{post.fields.campaignTitle}</h1>
         <div dangerouslySetInnerHTML={{ __html: post.html }} />
         <div>
-          {recaps.map(recap => (
-            <div key={recap.node.fields.pagePath}>
-              <Link
-                to={recap.node.fields.pagePath}
-                key={recap.node.fields.pagePath}
-              >
-                {recap.node.fields.pageTitle}
-              </Link>
-            </div>
-          ))}
+          <ImageLinkList>
+            {recaps.map(({ node: { fields: recap } }) => (
+              <ImageLink pagePath={recap.pagePath} imageUri={recap.imageUri}>
+                {recap.pageTitle}
+              </ImageLink>
+            ))}
+          </ImageLinkList>
         </div>
       </div>
     </Layout>
@@ -35,6 +35,7 @@ export const query = graphql`
       html
       fields {
         campaignTitle
+        imageUri
       }
     }
     recaps: allMarkdownRemark(
@@ -52,6 +53,7 @@ export const query = graphql`
           fields {
             pageTitle
             pagePath
+            imageUri
           }
         }
       }
