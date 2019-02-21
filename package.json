@@ -26,12 +26,13 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
+    "heroku-postbuild": "gatsby build",
+    "start": "gatsby serve",
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "start": "npm run develop",
+    "dev": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
-    "heroku-postbuild": "gatsby build"
+    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
   },
   "repository": {
     "type": "git",
